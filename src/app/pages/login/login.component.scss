@@ -1,0 +1,192 @@
+@use "../../../../public/styles/fonts.scss";
+@use "../../../../public/styles/colors.scss";
+
+main {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+#left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 6rem;
+
+  p {
+    margin-bottom: 1rem;
+    font-size: 3rem;
+    font-family: fonts.$font-primary;
+    font-weight: bold;
+  }
+
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    label {
+      margin: 1rem 0 0.5rem 0;
+      font-family: fonts.$font-secondary;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      padding: 1rem;
+      border: none;
+      border-radius: 2rem;
+      background-color: rgba($color: #000000, $alpha: 0.025);
+    }
+
+    input[type="text"]:hover,
+    input[type="password"]:hover {
+      background-color: rgba($color: #000000, $alpha: 0.05);
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      background-color: rgba($color: #000000, $alpha: 0.075);
+    }
+
+    div {
+      position: relative;
+      display: flex;
+
+      input {
+        width: 100%;
+      }
+
+      button {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translate(-50%, -50%);
+        background: none;
+        border: none;
+
+        svg {
+          fill: rgba($color: #000000, $alpha: 0.5);
+          transition: all 0.15s linear;
+        }
+      }
+
+      button:hover {
+        cursor: pointer;
+
+        svg {
+          fill: rgba($color: #000000, $alpha: 0.75);
+        }
+      }
+    }
+
+    input[type="submit"],
+    input[type="button"] {
+      padding: 1rem 3rem;
+      margin-top: 3rem;
+      background: linear-gradient(
+        to right,
+        colors.$primary-gradient,
+        colors.$secondary-gradient
+      );
+      border: 2px solid transparent;
+      border-radius: 2rem;
+      font-family: fonts.$font-tertiary;
+      font-weight: 500;
+      color: white;
+      transition: background 0.3s ease-in-out;
+    }
+
+    input[type="submit"],
+    input[type="button"]:hover {
+      cursor: pointer;
+      background: linear-gradient(
+        to right,
+        colors.$secondary-gradient,
+        colors.$primary-gradient
+      );
+    }
+  }
+
+  footer {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: fonts.$font-tertiary;
+    font-size: 1.05rem;
+    font-weight: 500;
+
+    > label {
+      background: -webkit-linear-gradient(
+        colors.$primary-gradient,
+        colors.$secondary-gradient
+      );
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    > label:hover {
+      cursor: pointer;
+    }
+
+    a {
+      color: black;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+#right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    to right,
+    colors.$primary-gradient,
+    colors.$secondary-gradient
+  );
+  color: white;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    span:nth-child(1) {
+      font-size: 3rem;
+      font-family: fonts.$font-primary;
+      font-weight: bold;
+    }
+
+    span:nth-child(2) {
+      font-size: 1.75rem;
+      font-family: fonts.$font-secondary;
+      font-weight: 400;
+    }
+  }
+
+  button {
+    padding: 1rem 3rem;
+    margin-top: 3rem;
+    background: none;
+    border: 2px solid white;
+    border-radius: 2rem;
+    color: white;
+    font-family: fonts.$font-tertiary;
+    font-weight: 500;
+    transition: background-color 0.3s linear, color 0.3s linear;
+  }
+
+  button:hover {
+    cursor: pointer;
+    background-color: white;
+    color: colors.$primary-gradient;
+  }
+}
