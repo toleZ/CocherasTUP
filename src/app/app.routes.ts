@@ -7,6 +7,7 @@ import { onlyPublicGuard } from "./guards/only-public.guard";
 import { ReportsComponent } from "./pages/reports/reports.component";
 import { onlyAdminGuard } from "./guards/only-admin.guard";
 import { onlyLoggedGuard } from "./guards/only-logged.guard";
+import { SignUpComponent } from "./pages/sign-up/sign-up.component";
 
 export const routes: Routes = [
   {
@@ -30,11 +31,11 @@ export const routes: Routes = [
     component: LoginComponent,
     canActivate: [onlyPublicGuard],
   },
-  // {
-  //   path: "",
-  //   redirectTo: "login",
-  //   pathMatch: "full",
-  // },
+  {
+    path: "sign-up",
+    component: SignUpComponent,
+    canActivate: [onlyPublicGuard],
+  },
   {
     path: "not-found",
     component: NotFoundComponent,

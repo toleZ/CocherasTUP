@@ -1,11 +1,13 @@
 import { Component, inject } from "@angular/core";
 import { Router, RouterModule } from "@angular/router";
 import { AuthDataService } from "../../services/auth-data.service";
+import { FormsModule, NgForm } from "@angular/forms";
+import { Login } from "../../interfaces/login";
 
 @Component({
   selector: "app-login",
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, FormsModule],
   templateUrl: "./login.component.html",
   styleUrl: "./login.component.scss",
 })
@@ -21,13 +23,14 @@ export class LoginComponent {
       this.passwordInputType === "password" ? "text" : "password";
   }
 
-  async handleSubmit() {
-    const loginData = {
-      username: "admin",
-      password: "admin",
-    };
+  remember: boolean = false;
 
-    const res = await this.authService.login(loginData);
+  async handleSubmit(loginForm: NgForm) {
+    const { username, password } = loginForm.value;
+
+    const loginData: Login = { username, password };
+
+    const res = await this.authService.login(loginData, this.remember);
 
     res ? this.router.navigate(["/parking-state"]) : (this.errorLogin = true);
   }

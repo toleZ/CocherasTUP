@@ -1,5 +1,15 @@
 export interface User {
-  username: string;
   token: string;
-  esAdmin: boolean;
+  username: string;
+  esAdmin: 0 | 1;
+}
+
+export interface UserByStorage {
+  token: string;
+  username: string;
+  nombre: string;
+  apellido: string;
+  password: string;
+  eliminado: 0 | 1;
+  esAdmin: 0 | 1;
 }

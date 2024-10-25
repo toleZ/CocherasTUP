@@ -1,1 +1,106 @@
-<p>reports works!</p>
+<main>
+  <table>
+    <thead>
+      <tr>
+        <td>
+          Nro
+          <button (click)="handleSortBy('idCochera')">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              [ngClass]="{ active: sortBy.as === 'idCochera' }"
+            >
+              <path
+                d="M320-440v-287L217-624l-57-56 200-200 200 200-57 56-103-103v287h-80ZM600-80 400-280l57-56 103 103v-287h80v287l103-103 57 56L600-80Z"
+              />
+            </svg>
+          </button>
+        </td>
+
+        <td>
+          Patent
+          <button (click)="handleSortBy('patente')">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              [ngClass]="{ active: sortBy.as === 'patente' }"
+            >
+              <path
+                d="M320-440v-287L217-624l-57-56 200-200 200 200-57 56-103-103v287h-80ZM600-80 400-280l57-56 103 103v-287h80v287l103-103 57 56L600-80Z"
+              />
+            </svg>
+          </button>
+        </td>
+
+        <td>
+          Entry time
+          <button (click)="handleSortBy('horaIngreso')">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              [ngClass]="{ active: sortBy.as === 'horaIngreso' }"
+            >
+              <path
+                d="M320-440v-287L217-624l-57-56 200-200 200 200-57 56-103-103v287h-80ZM600-80 400-280l57-56 103 103v-287h80v287l103-103 57 56L600-80Z"
+              />
+            </svg>
+          </button>
+        </td>
+
+        <td>
+          Departure time
+          <button (click)="handleSortBy('horaEgreso')">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              [ngClass]="{ active: sortBy.as === 'horaEgreso' }"
+            >
+              <path
+                d="M320-440v-287L217-624l-57-56 200-200 200 200-57 56-103-103v287h-80ZM600-80 400-280l57-56 103 103v-287h80v287l103-103 57 56L600-80Z"
+              />
+            </svg>
+          </button>
+        </td>
+
+        <td>
+          Cost
+          <button (click)="handleSortBy('costo')">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              [ngClass]="{ active: sortBy.as === 'costo' }"
+            >
+              <path
+                d="M320-440v-287L217-624l-57-56 200-200 200 200-57 56-103-103v287h-80ZM600-80 400-280l57-56 103 103v-287h80v287l103-103 57 56L600-80Z"
+              />
+            </svg>
+          </button>
+        </td>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (garage of garageService.garages; track $index) {
+      <tr>
+        <td>{{ garage.idCochera }}</td>
+        <td>{{ garage.patente }}</td>
+        <td>{{ garage.horaIngreso }}</td>
+        <td>{{ garage.horaEgreso }}</td>
+        <td>$ {{ garage.costo }}</td>
+      </tr>
+      } @empty {
+      <span>Parking is empty 😭</span>
+      }
+    </tbody>
+  </table>
+</main>

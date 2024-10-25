@@ -1,173 +1,27 @@
 import { inject, Injectable } from "@angular/core";
 import { Parking } from "../interfaces/parking";
 import { AuthDataService } from "./auth-data.service";
+import { Garage } from "../interfaces/garage";
 
 @Injectable({
   providedIn: "root",
 })
 export class ParkingDataService {
-  constructor() {}
+  constructor() {
+    this.handleGetParkings();
+    this._joinTableWithGarages();
+  }
 
   authService = inject(AuthDataService);
 
-  parkingsData: Parking[] = [
-    {
-      number: 1,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 2,
-      disponibility: true,
-      entry: "2024-09-09",
-    },
-    {
-      number: 3,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 4,
-      disponibility: true,
-      entry: "2024-09-09",
-    },
-    {
-      number: 5,
-      disponibility: true,
-      entry: "2024-09-09",
-    },
-    {
-      number: 6,
-      disponibility: true,
-      entry: "2024-09-09",
-    },
-    {
-      number: 7,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 8,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 9,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 10,
-      disponibility: true,
-      entry: "2024-09-09",
-    },
-    {
-      number: 11,
-      disponibility: true,
-      entry: "2024-09-09",
-    },
-    {
-      number: 12,
-      disponibility: true,
-      entry: "2024-09-09",
-    },
-    {
-      number: 13,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 14,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 15,
-      disponibility: true,
-      entry: "2024-09-09",
-    },
-    {
-      number: 16,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 17,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 18,
-      disponibility: true,
-      entry: "2024-09-09",
-    },
-    {
-      number: 19,
-      disponibility: true,
-      entry: "2024-09-09",
-    },
-    {
-      number: 20,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 21,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 22,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 23,
-      disponibility: false,
-      entry: "2024-09-09",
-    },
-    {
-      number: 24,
-      disponibility: true,
-      entry: "2024-09-09",
-    },
-    {
-      number: 25,
-      disponibility: true,
-      entry: "2024-09-09",
-    },
-  ];
-
-  lastNumber = this.parkingsData[this.parkingsData.length - 1]?.number || 0;
-
-  handleEmptyAll = () => (this.parkingsData = []);
-
-  handleDeleteByNumber = (toDelete: number) => {
-    this.parkingsData = this.parkingsData.filter(
-      ({ number }) => number !== toDelete
-    );
+  fullParkingsData: Parking[] = [];
+  parkingsData: Parking[] = [];
+  sortBy: { as: "id" | "deshabilitada" | "descripcion"; order: 1 | -1 } = {
+    as: "id",
+    order: 1,
   };
 
-  handleAddParking = () => {
-    const newParking: Parking = {
-      number: this.lastNumber++,
-      disponibility: true,
-      entry: "2024-05-04",
-    };
-
-    this.parkingsData.push(newParking);
-  };
-
-  handleDisponibility = (toChange: number) => {
-    this.parkingsData = this.parkingsData.map((parking) => {
-      if (toChange === parking.number)
-        return {
-          ...parking,
-          disponibility: !parking.disponibility,
-        };
-      else return parking;
-    });
-  };
+  private _baseURL = "http://localhost:4000/cocheras";
 
   handleGetParkings = async () => {
     const cfg = {
@@ -177,9 +31,143 @@ export class ParkingDataService {
       },
     };
 
-    const res = await fetch("http://localhost:4000/cocheras", cfg);
+    const res = await fetch(this._baseURL, cfg);
     const data = await res.json();
 
+    this.fullParkingsData = data;
     this.parkingsData = data;
+
+    this._joinTableWithGarages();
+
+    this.handleSortBy(this.sortBy.as, this.sortBy.order);
+  };
+
+  handleGetParkingByDescipcion = (toSearch: string) => {
+    toSearch = toSearch.trim();
+
+    const regex = /^[a-zA-Z0-9]*$/;
+
+    if (!regex.test(toSearch)) return;
+
+    if (!toSearch) {
+      this.parkingsData = this.fullParkingsData;
+      return;
+    }
+
+    const filteredData = this.fullParkingsData.filter(({ descripcion }) =>
+      descripcion.toLowerCase().includes(toSearch.toLowerCase())
+    );
+
+    this.parkingsData = filteredData;
+  };
+
+  private _getGarages = async () => {
+    const cfg = {
+      headers: {
+        authorization: "Bearer " + this.authService.user?.token,
+      },
+    };
+
+    const res = await fetch("http://localhost:4000/estacionamientos", cfg);
+
+    if (res.status === 200) {
+      const data = await res.json();
+      return data;
+    }
+  };
+
+  private _joinTableWithGarages = async () => {
+    const garages: Garage[] = await this._getGarages();
+
+    if (garages) {
+      const joinedData = this.fullParkingsData.map((parking) => {
+        const garage: any = garages.find(
+          ({ idCochera, horaEgreso }) => idCochera === parking.id && !horaEgreso
+        );
+
+        return { ...parking, garage };
+      });
+
+      this.fullParkingsData = joinedData;
+      this.parkingsData = joinedData;
+    }
+  };
+
+  handleDeleteById = async (toDelete: number) => {
+    const cfg = {
+      method: "DELETE",
+      headers: {
+        authorization: "Bearer " + this.authService.user?.token,
+      },
+    };
+
+    const res = await fetch(`${this._baseURL}/${toDelete}`, cfg);
+
+    if (res.status === 200) this.handleGetParkings();
+  };
+
+  handleEmptyAll = () => {
+    this.parkingsData.forEach(async ({ id }) => {
+      this.handleDeleteById(id);
+    });
+  };
+
+  private _generateRandomDescription(): string {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+    const randomNumber = Math.floor(Math.random() * 9) + 1;
+
+    return `${randomLetter}${randomNumber}`;
+  }
+
+  handleAddParking = async () => {
+    const cfg = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: "Bearer " + this.authService.user?.token,
+      },
+      body: JSON.stringify({ descripcion: this._generateRandomDescription() }),
+    };
+
+    const res = await fetch(this._baseURL, cfg);
+
+    if (res.status === 200) this.handleGetParkings();
+  };
+
+  handleDisponibility = async (toChangeId: number) => {
+    const isEneabled = this.parkingsData.find(
+      ({ id }) => id === toChangeId
+    )?.deshabilitada;
+
+    const cfg = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        authorization: "Bearer " + this.authService.user?.token,
+      },
+    };
+
+    const res = await fetch(
+      `${this._baseURL}/${toChangeId}/${
+        isEneabled === 0 ? "disable" : "enable"
+      }`,
+      cfg
+    );
+
+    if (res.status === 200) this.handleGetParkings();
+  };
+
+  handleSortBy = (
+    sortBy: "id" | "deshabilitada" | "descripcion",
+    order: 1 | -1
+  ) => {
+    this.parkingsData.sort((a, b) => {
+      if (a[sortBy] < b[sortBy]) return -order;
+      if (a[sortBy] > b[sortBy]) return order;
+      return 0;
+    });
+
+    this.sortBy = { as: sortBy, order };
   };
 }

@@ -45,15 +45,21 @@ aside {
     gap: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.5);
 
-    a {
+    a,
+    button,
+    form {
       padding: 0.75rem;
       display: flex;
       align-items: center;
       gap: 1rem;
       font-family: fonts.$font-secondary;
+      font-size: 1rem;
+      text-align: left;
       text-decoration: none;
       white-space: nowrap;
       color: rgba(255, 255, 255, 0.75);
+      border: none;
+      background: none;
       border-left: 3px solid transparent;
       transition: border-color 150ms linear;
 
@@ -78,17 +84,32 @@ aside {
           fill: #fff;
         }
       }
+
+      > input {
+        border: none;
+        background: none;
+        font-family: fonts.$font-secondary;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.75);
+
+        &:focus {
+          outline: none;
+        }
+      }
     }
   }
 
-  span {
+  span,
+  input {
     width: 0;
+    padding: 0;
     transition: width 300ms ease-in-out;
     overflow: hidden;
   }
 
   &:hover {
-    span {
+    span,
+    input {
       width: 7rem;
     }
 

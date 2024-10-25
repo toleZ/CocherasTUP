@@ -2,9 +2,54 @@
   <table>
     <thead>
       <tr>
-        <td>Nro</td>
-        <td>Disponibility</td>
-        <td>Entry</td>
+        <td>
+          Nro
+          <button (click)="handleSortBy('id')">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              [ngClass]="{ active: sortBy.as === 'id' }"
+            >
+              <path
+                d="M320-440v-287L217-624l-57-56 200-200 200 200-57 56-103-103v287h-80ZM600-80 400-280l57-56 103 103v-287h80v287l103-103 57 56L600-80Z"
+              />
+            </svg>
+          </button>
+        </td>
+        <td>
+          Disponibility
+          <button (click)="handleSortBy('deshabilitada')">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              [ngClass]="{ active: sortBy.as === 'deshabilitada' }"
+            >
+              <path
+                d="M320-440v-287L217-624l-57-56 200-200 200 200-57 56-103-103v287h-80ZM600-80 400-280l57-56 103 103v-287h80v287l103-103 57 56L600-80Z"
+              />
+            </svg>
+          </button>
+        </td>
+        <td>
+          Entry
+          <button (click)="handleSortBy('descripcion')">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              [ngClass]="{ active: sortBy.as === 'descripcion' }"
+            >
+              <path
+                d="M320-440v-287L217-624l-57-56 200-200 200 200-57 56-103-103v287h-80ZM600-80 400-280l57-56 103 103v-287h80v287l103-103 57 56L600-80Z"
+              />
+            </svg>
+          </button>
+        </td>
         <td>Actions</td>
       </tr>
     </thead>
@@ -12,14 +57,28 @@
     <tbody>
       @for (parking of parkingDataService.parkingsData; track $index) {
       <tr>
-        <td>{{ parking.number }}</td>
-        <td class="{{ parking.disponibility ? 'available' : 'full' }}">
-          {{ parking.disponibility ? "Available" : "Full" }}
+        <td>{{ parking.id }}</td>
+        <td
+          class="{{
+            parking.garage
+              ? 'full'
+              : parking.deshabilitada === 0
+              ? 'available'
+              : 'engaged'
+          }}"
+          (click)="
+            parking.garage ? handleCloseGarage(parking.garage.patente) : null
+          "
+        >
+          {{
+            parking.garage?.patente ||
+              (parking.deshabilitada === 0 ? "Available" : "Engaged")
+          }}
         </td>
-        <td>{{ parking.entry }}</td>
+        <td>{{ parking.descripcion }}</td>
         <td>
           @if (isAdmin) {
-          <button (click)="handleDeleteByNumber(parking.number)">
+          <button (click)="handleDeleteById(parking.id)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
@@ -33,8 +92,8 @@
           </button>
           }
 
-          <button (click)="handleDisponibility(parking.number)">
-            @if (parking.disponibility) {
+          <button (click)="handleDisponibility(parking.id)">
+            @if (parking.deshabilitada) {
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
@@ -65,10 +124,21 @@
       }
     </tbody>
   </table>
-
-  <div>
-    <button (click)="handleGetParkings()">Get all parking</button
-    ><button (click)="handleAddParking()">Add new parking</button
-    ><button (click)="handleEmptyAll()">Empty all</button>
-  </div>
 </main>
+
+<!-- <div>
+  <button (click)="handleAddParking()">Add new parking</button
+  ><button (click)="handleEmptyAll()">Empty all</button>
+  <form #garageForm="ngForm" (ngSubmit)="handleAddGarage(garageForm)">
+    <select name="selectedParking" ngModel>
+      <option value="">Parking Nro.</option>
+      @for (parking of
+      getOpenParkings(this.parkingDataService.fullParkingsData,
+      this.garageService.garages); track $index){
+      <option [value]="parking.id">{{ parking.id }}</option>
+      }
+    </select>
+    <input type="text" name="carPatent" placeholder="Patent" ngModel />
+    <input type="submit" value="Add" />
+  </form>
+</div> -->

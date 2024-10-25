@@ -19,6 +19,28 @@ main {
           font-family: fonts.$font-primary;
           font-weight: 600;
           color: white;
+          display: flex;
+          align-items: center;
+
+          button {
+            background: none;
+            border: none;
+
+            svg {
+              fill: rgba($color: #ffff, $alpha: 0.25);
+              transition: fill 0.3s linear;
+
+              &:hover {
+                cursor: pointer;
+                fill: rgba($color: #ffff, $alpha: 0.5);
+              }
+
+              &.active {
+                fill: rgba($color: #ffff, $alpha: 0.75);
+                animation: flip 300ms linear forwards;
+              }
+            }
+          }
         }
       }
     }
@@ -63,13 +85,23 @@ main {
             border-radius: 1rem;
           }
 
+          &.full {
+            &::after {
+              background-color: colors.$info;
+            }
+
+            &:hover {
+              cursor: pointer;
+            }
+          }
+
           &.available {
             &::after {
               background-color: colors.$success;
             }
           }
 
-          &.full {
+          &.engaged {
             &::after {
               background-color: colors.$error;
             }
@@ -79,14 +111,13 @@ main {
         button {
           border: none;
           background: none;
-          fill: rgba(#ffffff, 0.5);
-          transition: fill 0.3s linear, transform 0.3s ease-in-out;
+          fill: rgba(#ffff, 0.5);
+          transition: fill 0.3s linear;
         }
 
         button:hover {
           cursor: pointer;
-          fill: rgba(#ffffff, 0.75);
-          transform: scale(1.2);
+          fill: rgba(#ffff, 0.75);
         }
       }
 
@@ -141,5 +172,14 @@ main {
         background-color: rgba(0, 0, 0, 0.25);
       }
     }
+  }
+}
+
+@keyframes flip {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
   }
 }

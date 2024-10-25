@@ -1,8 +1,26 @@
 <main>
   <section id="left">
-    <p>Sign In</p>
+    <p>Sign Up</p>
 
-    <form #loginForm="ngForm" (ngSubmit)="handleSubmit(loginForm)">
+    <form #registerForm="ngForm" (ngSubmit)="handleSubmit(registerForm)">
+      <label>Name</label>
+      <input
+        type="text"
+        name="name"
+        placeholder="Type your name"
+        ngModel
+        required
+      />
+
+      <label>Last name</label>
+      <input
+        type="text"
+        name="last_name"
+        placeholder="Type your last name"
+        ngModel
+        required
+      />
+
       <label>Username</label>
       <input
         type="text"
@@ -36,22 +54,16 @@
         </button>
       </div>
 
-      <input type="submit" value="Sign In" />
+      <input type="submit" value="Sign Up" />
     </form>
-
-    <footer>
-      <label><input type="checkbox" [(ngModel)]="remember" />Remember Me</label>
-
-      <a [routerLink]="['/forgot-password']">Forgot Password</a>
-    </footer>
   </section>
 
   <section id="right">
     <div>
-      <span>Welcome to login</span>
-      <span>Don´t have an account?</span>
+      <span>Welcome to Spot Control</span>
+      <span>You already have an account?</span>
     </div>
 
-    <a [routerLink]="['/sign-up']">Sign Up</a>
+    <a [routerLink]="['/login']">Sign In</a>
   </section>
 </main>
