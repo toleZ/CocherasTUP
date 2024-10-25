@@ -1,6 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Rate } from "../interfaces/rate";
 import { AuthDataService } from "./auth-data.service";
+import { ModalService } from "./modal.service";
 
 @Injectable({
   providedIn: "root",
@@ -11,6 +12,7 @@ export class RateDataService {
   }
 
   private _authService = inject(AuthDataService);
+  private _modalService = inject(ModalService);
   private _BASE_URL = "http://localhost:4000/tarifas";
 
   rates: Rate[] = [];
@@ -36,11 +38,18 @@ export class RateDataService {
         "Content-type": "application/json",
         authorization: "Bearer " + this._authService.user?.token,
       },
-      body: JSON.stringify({ value }),
+      body: JSON.stringify({ valor: value }),
     };
 
     const res = await fetch(`${this._BASE_URL}/${rateId}`, cfg);
 
-    if (res.status === 200) this.getRates();
+    if (res.status === 200) {
+      this._modalService.successModal(
+        "Success",
+        "Rate value updated successfully"
+      );
+
+      this.getRates();
+    }
   };
 }

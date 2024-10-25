@@ -113,11 +113,16 @@ main {
           background: none;
           fill: rgba(#ffff, 0.5);
           transition: fill 0.3s linear;
-        }
 
-        button:hover {
-          cursor: pointer;
-          fill: rgba(#ffff, 0.75);
+          &:hover {
+            cursor: pointer;
+            fill: rgba(#ffff, 0.75);
+          }
+
+          &:disabled {
+            cursor: not-allowed;
+            fill: rgba($color: #ffff, $alpha: 0.1);
+          }
         }
       }
 

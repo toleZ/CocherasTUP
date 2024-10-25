@@ -1,5 +1,6 @@
 import { Component, inject } from "@angular/core";
 import { RateDataService } from "../../services/rate-data.service";
+import { ModalService } from "../../services/modal.service";
 
 @Component({
   selector: "app-rates",
@@ -10,8 +11,15 @@ import { RateDataService } from "../../services/rate-data.service";
 })
 export class RatesComponent {
   rateService = inject(RateDataService);
+  private _modalService = inject(ModalService);
 
-  updateRateValue = (rateId: string, value: number) => {
-    this.rateService.updateRateValue(rateId, value);
+  updateRateValue = async (rateId: string) => {
+    this._modalService
+      .inputModal("Update Rate", "Enter new rate value", "Rate Value", "number")
+      .then((rateValue) => {
+        if (rateValue) {
+          this.rateService.updateRateValue(rateId, rateValue);
+        }
+      });
   };
 }

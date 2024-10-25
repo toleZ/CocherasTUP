@@ -78,6 +78,22 @@
         <td>{{ parking.descripcion }}</td>
         <td>
           @if (isAdmin) {
+          <button
+            (click)="handleAddGarage(parking.id)"
+            [disabled]="parking.deshabilitada || checkIfBusy(parking.id)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+            >
+              <path
+                d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"
+              />
+            </svg>
+          </button>
+
           <button (click)="handleDeleteById(parking.id)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -125,20 +141,3 @@
     </tbody>
   </table>
 </main>
-
-<!-- <div>
-  <button (click)="handleAddParking()">Add new parking</button
-  ><button (click)="handleEmptyAll()">Empty all</button>
-  <form #garageForm="ngForm" (ngSubmit)="handleAddGarage(garageForm)">
-    <select name="selectedParking" ngModel>
-      <option value="">Parking Nro.</option>
-      @for (parking of
-      getOpenParkings(this.parkingDataService.fullParkingsData,
-      this.garageService.garages); track $index){
-      <option [value]="parking.id">{{ parking.id }}</option>
-      }
-    </select>
-    <input type="text" name="carPatent" placeholder="Patent" ngModel />
-    <input type="submit" value="Add" />
-  </form>
-</div> -->

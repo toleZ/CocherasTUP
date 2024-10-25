@@ -3,11 +3,8 @@
     <thead>
       <tr>
         <td>Time</td>
-
         <td>Description</td>
-
         <td>Cost</td>
-
         <td>Actions</td>
       </tr>
     </thead>
@@ -19,7 +16,7 @@
         <td>{{ r.descripcion }}</td>
         <td>{{ r.valor }}</td>
         <td>
-          <button>
+          <button (click)="updateRateValue(r.id)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24px"

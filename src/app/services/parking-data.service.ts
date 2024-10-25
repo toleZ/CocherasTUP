@@ -1,7 +1,8 @@
+import { Parking } from "./../interfaces/parking";
 import { inject, Injectable } from "@angular/core";
-import { Parking } from "../interfaces/parking";
 import { AuthDataService } from "./auth-data.service";
 import { Garage } from "../interfaces/garage";
+import { ModalService } from "./modal.service";
 
 @Injectable({
   providedIn: "root",
@@ -12,7 +13,8 @@ export class ParkingDataService {
     this._joinTableWithGarages();
   }
 
-  authService = inject(AuthDataService);
+  private _authService = inject(AuthDataService);
+  private _modalService = inject(ModalService);
 
   fullParkingsData: Parking[] = [];
   parkingsData: Parking[] = [];
@@ -27,7 +29,7 @@ export class ParkingDataService {
     const cfg = {
       method: "GET",
       headers: {
-        authorization: "Bearer " + this.authService.user?.token,
+        authorization: "Bearer " + this._authService.user?.token,
       },
     };
 
@@ -64,7 +66,7 @@ export class ParkingDataService {
   private _getGarages = async () => {
     const cfg = {
       headers: {
-        authorization: "Bearer " + this.authService.user?.token,
+        authorization: "Bearer " + this._authService.user?.token,
       },
     };
 
@@ -97,13 +99,20 @@ export class ParkingDataService {
     const cfg = {
       method: "DELETE",
       headers: {
-        authorization: "Bearer " + this.authService.user?.token,
+        authorization: "Bearer " + this._authService.user?.token,
       },
     };
 
     const res = await fetch(`${this._baseURL}/${toDelete}`, cfg);
 
-    if (res.status === 200) this.handleGetParkings();
+    if (res.status === 200) {
+      this.handleGetParkings();
+
+      this._modalService.successModal(
+        "Cochera eliminada",
+        `La cochera ${toDelete} fue eliminada con éxito`
+      );
+    }
   };
 
   handleEmptyAll = () => {
@@ -125,14 +134,21 @@ export class ParkingDataService {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        Authorization: "Bearer " + this.authService.user?.token,
+        Authorization: "Bearer " + this._authService.user?.token,
       },
       body: JSON.stringify({ descripcion: this._generateRandomDescription() }),
     };
 
     const res = await fetch(this._baseURL, cfg);
 
-    if (res.status === 200) this.handleGetParkings();
+    if (res.status === 200) {
+      this.handleGetParkings();
+
+      this._modalService.successModal(
+        "Parking added",
+        "Parking was added successfully"
+      );
+    }
   };
 
   handleDisponibility = async (toChangeId: number) => {
@@ -144,7 +160,7 @@ export class ParkingDataService {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        authorization: "Bearer " + this.authService.user?.token,
+        authorization: "Bearer " + this._authService.user?.token,
       },
     };
 
@@ -155,7 +171,16 @@ export class ParkingDataService {
       cfg
     );
 
-    if (res.status === 200) this.handleGetParkings();
+    if (res.status === 200) {
+      this.handleGetParkings();
+
+      this._modalService.successModal(
+        "Parking disponibility changed",
+        `Parking ${toChangeId} disponibility was changed to ${
+          isEneabled === 0 ? "disabled" : "enabled"
+        }`
+      );
+    }
   };
 
   handleSortBy = (

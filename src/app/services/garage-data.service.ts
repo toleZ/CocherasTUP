@@ -2,6 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { AuthDataService } from "./auth-data.service";
 import { ParkingDataService } from "./parking-data.service";
 import { Garage } from "../interfaces/garage";
+import { ModalService } from "./modal.service";
 
 @Injectable({
   providedIn: "root",
@@ -15,6 +16,7 @@ export class GarageDataService {
 
   private _authService = inject(AuthDataService);
   private _parkingDataService = inject(ParkingDataService);
+  private _modalService = inject(ModalService);
   private _baseURL = "http://localhost:4000/estacionamientos";
 
   getGarages = async () => {
@@ -31,14 +33,16 @@ export class GarageDataService {
       this.garages = data.filter((g: Garage) => g.horaEgreso != null);
   };
 
-  openGarage = async (parkingId: string, carPatent: string) => {
-    // Add alert modal here if parking is disabled
+  openGarage = async (parkingId: number, carPatent: string) => {
     if (
       this._parkingDataService.fullParkingsData.find(
         ({ id }) => id === +parkingId
       )?.deshabilitada
     )
-      return;
+      this._modalService.errorModal(
+        "Error on open garage",
+        `The parking ${parkingId} is disabled`
+      );
 
     const cfg = {
       method: "POST",
@@ -58,6 +62,11 @@ export class GarageDataService {
     if (res.status === 200) {
       this.getGarages();
       this._parkingDataService.handleGetParkings();
+
+      this._modalService.successModal(
+        "Garage opened",
+        `The garage was opened correctly at parking ${parkingId} with car patent ${carPatent}`
+      );
     }
   };
 
@@ -79,6 +88,11 @@ export class GarageDataService {
     if (res.status === 200) {
       this.getGarages();
       this._parkingDataService.handleGetParkings();
+
+      this._modalService.successModal(
+        "Garage closed",
+        "The garage was closed correctly"
+      );
     }
   };
 }
