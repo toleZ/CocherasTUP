@@ -67,9 +67,13 @@ aside {
         fill: rgba(255, 255, 255, 0.75);
       }
 
-      &:hover {
+      &.page:hover {
         cursor: pointer;
         border-color: rgba(255, 255, 255, 0.25);
+      }
+
+      &.button:hover {
+        cursor: pointer;
       }
 
       &.active {

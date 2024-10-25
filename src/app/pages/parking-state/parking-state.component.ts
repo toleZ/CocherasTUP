@@ -1,4 +1,3 @@
-import { Parking } from "./../../interfaces/parking";
 import { ParkingDataService } from "./../../services/parking-data.service";
 import { Component, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
@@ -6,7 +5,6 @@ import { AuthDataService } from "../../services/auth-data.service";
 import { NgClass } from "@angular/common";
 import { GarageDataService } from "../../services/garage-data.service";
 import { FormsModule, NgForm } from "@angular/forms";
-import { Garage } from "../../interfaces/garage";
 import { ModalService } from "../../services/modal.service";
 
 @Component({
