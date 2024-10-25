@@ -11,6 +11,7 @@ export class RateDataService {
   }
 
   private _authService = inject(AuthDataService);
+  private _BASE_URL = "http://localhost:4000/tarifas";
 
   rates: Rate[] = [];
 
@@ -22,7 +23,7 @@ export class RateDataService {
       },
     };
 
-    const res = await fetch("https://localhost:4000/tarifas", cfg);
+    const res = await fetch(this._BASE_URL, cfg);
     const data = await res.json();
 
     this.rates = data;
@@ -30,7 +31,7 @@ export class RateDataService {
 
   updateRateValue = async (rateId: string, value: number) => {
     const cfg = {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-type": "application/json",
         authorization: "Bearer " + this._authService.user?.token,
@@ -38,7 +39,7 @@ export class RateDataService {
       body: JSON.stringify({ value }),
     };
 
-    const res = await fetch(`https://localhost:4000/tarifas/${rateId}`, cfg);
+    const res = await fetch(`${this._BASE_URL}/${rateId}`, cfg);
 
     if (res.status === 200) this.getRates();
   };
