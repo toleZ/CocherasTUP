@@ -8,3 +8,8 @@ export interface Garage {
   idUsuarioEgreso?: string;
   idCochera: number;
 }
+
+export interface Garages {
+  month: string;
+  garages: Garage[];
+}

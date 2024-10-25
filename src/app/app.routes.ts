@@ -8,6 +8,7 @@ import { ReportsComponent } from "./pages/reports/reports.component";
 import { onlyAdminGuard } from "./guards/only-admin.guard";
 import { onlyLoggedGuard } from "./guards/only-logged.guard";
 import { SignUpComponent } from "./pages/sign-up/sign-up.component";
+import { RatesComponent } from "./pages/rates/rates.component";
 
 export const routes: Routes = [
   {
@@ -22,6 +23,11 @@ export const routes: Routes = [
       {
         path: "reports",
         component: ReportsComponent,
+        canActivate: [onlyAdminGuard],
+      },
+      {
+        path: "rates",
+        component: RatesComponent,
         canActivate: [onlyAdminGuard],
       },
     ],

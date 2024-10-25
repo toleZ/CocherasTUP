@@ -12,13 +12,6 @@ export class GarageDataService {
   }
 
   garages: Garage[] = [];
-  sortBy: {
-    as: "idCochera" | "patente" | "horaIngreso" | "horaEgreso" | "costo";
-    order: 1 | -1;
-  } = {
-    as: "idCochera",
-    order: 1,
-  };
 
   private _authService = inject(AuthDataService);
   private _parkingDataService = inject(ParkingDataService);
@@ -34,10 +27,8 @@ export class GarageDataService {
     const res = await fetch(this._baseURL, cfg);
     const data = await res.json();
 
-    if (res.status === 200) {
+    if (res.status === 200)
       this.garages = data.filter((g: Garage) => g.horaEgreso != null);
-      this.handleSortBy(this.sortBy.as, this.sortBy.order);
-    }
   };
 
   openGarage = async (parkingId: string, carPatent: string) => {
@@ -89,21 +80,5 @@ export class GarageDataService {
       this.getGarages();
       this._parkingDataService.handleGetParkings();
     }
-  };
-
-  handleSortBy = (
-    as: "idCochera" | "patente" | "horaIngreso" | "horaEgreso" | "costo",
-    order: 1 | -1
-  ) => {
-    this.garages.sort((a, b) => {
-      const aValue = a[as] ?? 0;
-      const bValue = b[as] ?? 0;
-
-      if (aValue > bValue) return -order;
-      if (aValue < bValue) return order;
-      return 0;
-    });
-
-    this.sortBy = { as, order };
   };
 }

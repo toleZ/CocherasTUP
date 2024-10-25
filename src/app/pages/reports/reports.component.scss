@@ -12,7 +12,7 @@ main {
 
       tr {
         display: grid;
-        grid-template-columns: 0.5fr 1fr 1fr 1fr 0.5fr;
+        grid-template-columns: 0.5fr 1fr 1fr 1fr;
 
         td {
           padding: 1.75rem;
@@ -58,7 +58,7 @@ main {
 
       tr {
         display: grid;
-        grid-template-columns: 0.5fr 1fr 1fr 1fr 0.5fr;
+        grid-template-columns: 0.5fr 1fr 1fr 1fr;
         padding: 0.5rem 0;
         font-size: 1.2rem;
         color: white;
