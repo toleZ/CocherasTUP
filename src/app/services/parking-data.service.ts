@@ -3,6 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { AuthDataService } from "./auth-data.service";
 import { Garage } from "../interfaces/garage";
 import { ModalService } from "./modal.service";
+import { Paginate } from "../interfaces/paginate";
 
 @Injectable({
   providedIn: "root",
@@ -21,6 +22,12 @@ export class ParkingDataService {
   sortBy: { as: "id" | "deshabilitada" | "descripcion"; order: 1 | -1 } = {
     as: "id",
     order: 1,
+  };
+  paginate: Paginate = {
+    curPage: 1,
+    itemsPerPage: 10,
+    totalPages: Math.ceil(this.parkingsData.length / 10),
+    pagesToShow: [],
   };
 
   private _baseURL = "http://localhost:4000/cocheras";
@@ -42,6 +49,10 @@ export class ParkingDataService {
     this._joinTableWithGarages();
 
     this.handleSortBy(this.sortBy.as, this.sortBy.order);
+    this.paginate.totalPages = Math.ceil(
+      this.parkingsData.length / this.paginate.itemsPerPage
+    );
+    this.getPaginationArray();
   };
 
   handleGetParkingByDescipcion = (toSearch: string) => {
@@ -61,6 +72,10 @@ export class ParkingDataService {
     );
 
     this.parkingsData = filteredData;
+    this.paginate.totalPages = Math.ceil(
+      this.parkingsData.length / this.paginate.itemsPerPage
+    );
+    this.paginateData();
   };
 
   private _getGarages = async () => {
@@ -194,5 +209,44 @@ export class ParkingDataService {
     });
 
     this.sortBy = { as: sortBy, order };
+  };
+
+  paginateData = () => {
+    const start = (this.paginate.curPage - 1) * this.paginate.itemsPerPage;
+    const end = start + this.paginate.itemsPerPage;
+
+    return this.parkingsData.slice(start, end);
+  };
+
+  handleSetPage = (page: number) => {
+    if (page < 1 || page > this.paginate.totalPages) return;
+
+    this.paginate.curPage = page;
+  };
+
+  handleNextPage = () => {
+    if (this.paginate.curPage === this.paginate.totalPages) return;
+
+    this.paginate.curPage++;
+  };
+
+  handlePrevPage = () => {
+    if (this.paginate.curPage === 1) return;
+
+    this.paginate.curPage--;
+  };
+
+  handleLimitChange = (limit: 10 | 15 | 20) => {
+    this.paginate.itemsPerPage = limit;
+    this.paginate.totalPages = Math.ceil(
+      this.parkingsData.length / this.paginate.itemsPerPage
+    );
+  };
+
+  getPaginationArray = () => {
+    this.paginate.pagesToShow = Array.from(
+      { length: this.paginate.totalPages },
+      (_, i) => i + 1
+    );
   };
 }

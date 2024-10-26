@@ -7,9 +7,6 @@ main {
     border-collapse: collapse;
 
     thead {
-      position: sticky;
-      width: 100%;
-
       tr {
         display: grid;
         grid-template-columns: 0.5fr 1fr 1fr 0.5fr;
@@ -46,11 +43,9 @@ main {
     }
 
     tbody {
-      position: relative;
       display: block;
-      margin: 1rem;
-      margin-top: 0;
-      height: calc(100vh - 4.75rem - 2rem);
+      margin: 0 1rem;
+      height: calc(100vh - 10.9rem);
       overflow-y: auto;
       background: rgba(255, 255, 255, 0.2);
       box-shadow: 0 4px 30px rgba(255, 255, 255, 0.3);
@@ -175,6 +170,31 @@ main {
 
       &::-webkit-scrollbar-thumb:active {
         background-color: rgba(0, 0, 0, 0.25);
+      }
+    }
+
+    tfoot {
+      display: block;
+
+      tr {
+        display: grid;
+        grid-template-columns: 2fr 0.5fr;
+        justify-items: center;
+
+        td {
+          padding: 1.5rem;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+
+          &#pagination {
+            button.activePage:disabled {
+              cursor: not-allowed;
+              background-color: rgba($color: #ffff, $alpha: 0.5);
+              color: white;
+            }
+          }
+        }
       }
     }
   }

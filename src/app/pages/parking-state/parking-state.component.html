@@ -55,7 +55,7 @@
     </thead>
 
     <tbody>
-      @for (parking of parkingDataService.parkingsData; track $index) {
+      @for (parking of paginateData(); track $index) {
       <tr>
         <td>{{ parking.id }}</td>
         <td
@@ -139,5 +139,43 @@
       <span>Parking is empty 😭</span>
       }
     </tbody>
+
+    <tfoot>
+      <tr>
+        <td id="pagination">
+          <button
+            (click)="handlePrevPage()"
+            [disabled]="this.paginate.curPage === 1"
+          >
+            Prev
+          </button>
+          <div>
+            @for (i of paginate.pagesToShow ; track $index) {
+            <button
+              [ngClass]="{ activePage: $index + 1 === this.paginate.curPage }"
+              [disabled]="$index + 1 === this.paginate.curPage"
+              (click)="handleSetPage($index + 1)"
+            >
+              {{ $index + 1 }}
+            </button>
+            }
+          </div>
+          <button
+            (click)="handleNextPage()"
+            [disabled]="this.paginate.curPage === this.paginate.totalPages"
+          >
+            Next
+          </button>
+        </td>
+        <td>
+          <select (change)="handleLimitChange($event)">
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+          of {{ parkingDataService.parkingsData.length }} items
+        </td>
+      </tr>
+    </tfoot>
   </table>
 </main>
