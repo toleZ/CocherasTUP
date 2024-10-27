@@ -22,7 +22,6 @@ export class ParkingStateComponent {
 
   isAdmin = this.authService.user?.esAdmin;
   sortBy = this.parkingDataService.sortBy;
-  paginate = this.parkingDataService.paginate;
 
   handleEmptyAll = this.parkingDataService.handleEmptyAll;
 
@@ -78,7 +77,9 @@ export class ParkingStateComponent {
     )?.garage;
   };
 
-  paginateData = () => this.parkingDataService.paginateData();
+  paginateData = () => {
+    return this.parkingDataService.paginateData();
+  };
 
   handleSetPage = (page: number) => {
     this.parkingDataService.handleSetPage(page);

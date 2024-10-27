@@ -145,15 +145,25 @@
         <td id="pagination">
           <button
             (click)="handlePrevPage()"
-            [disabled]="this.paginate.curPage === 1"
+            [disabled]="this.parkingDataService.paginate.curPage === 1"
           >
-            Prev
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+            >
+              <path
+                d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"
+              />
+            </svg>
           </button>
           <div>
-            @for (i of paginate.pagesToShow ; track $index) {
+            @for (i of parkingDataService.paginate.pagesToShow ; track $index) {
             <button
-              [ngClass]="{ activePage: $index + 1 === this.paginate.curPage }"
-              [disabled]="$index + 1 === this.paginate.curPage"
+              [disabled]="
+                $index + 1 === this.parkingDataService.paginate.curPage
+              "
               (click)="handleSetPage($index + 1)"
             >
               {{ $index + 1 }}
@@ -162,12 +172,24 @@
           </div>
           <button
             (click)="handleNextPage()"
-            [disabled]="this.paginate.curPage === this.paginate.totalPages"
+            [disabled]="
+              this.parkingDataService.paginate.curPage ===
+              this.parkingDataService.paginate.totalPages
+            "
           >
-            Next
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+            >
+              <path
+                d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"
+              />
+            </svg>
           </button>
         </td>
-        <td>
+        <td id="selectLimit">
           <select (change)="handleLimitChange($event)">
             <option value="10">10</option>
             <option value="15">15</option>

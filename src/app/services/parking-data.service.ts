@@ -214,6 +214,7 @@ export class ParkingDataService {
   paginateData = () => {
     const start = (this.paginate.curPage - 1) * this.paginate.itemsPerPage;
     const end = start + this.paginate.itemsPerPage;
+    this.getPaginationArray();
 
     return this.parkingsData.slice(start, end);
   };
@@ -241,12 +242,40 @@ export class ParkingDataService {
     this.paginate.totalPages = Math.ceil(
       this.parkingsData.length / this.paginate.itemsPerPage
     );
+    if (this.paginate.curPage > this.paginate.totalPages) {
+      this.paginate.curPage = this.paginate.totalPages;
+    }
+    this.getPaginationArray();
   };
 
   getPaginationArray = () => {
-    this.paginate.pagesToShow = Array.from(
-      { length: this.paginate.totalPages },
-      (_, i) => i + 1
-    );
+    const { curPage, totalPages } = this.paginate;
+
+    let pages: number[] = [];
+
+    if (totalPages <= 5) {
+      pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+    } else if (curPage <= 3) {
+      pages = [1, 2, 3, 4, 5];
+    } else if (curPage >= totalPages - 2) {
+      pages = Array.from({ length: 5 }, (_, i) => totalPages - 4 + i);
+    } else {
+      pages = Array.from({ length: 5 }, (_, i) => curPage - 2 + i);
+    }
+
+    pages = pages.map((page) => Math.max(1, Math.min(totalPages, page)));
+
+    if (pages.length < 5) {
+      const firstPage = pages[0];
+      if (firstPage === 1) {
+        pages = [1, 2, 3, 4, 5].slice(0, totalPages);
+      } else {
+        pages = Array.from({ length: 5 }, (_, i) =>
+          Math.min(firstPage + i, totalPages)
+        );
+      }
+    }
+
+    this.paginate.pagesToShow = pages;
   };
 }
