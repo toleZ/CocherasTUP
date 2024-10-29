@@ -38,11 +38,23 @@ export class GarageDataService {
       this._parkingDataService.fullParkingsData.find(
         ({ id }) => id === +parkingId
       )?.deshabilitada
-    )
-      this._modalService.errorModal(
+    ) {
+      return this._modalService.errorModal(
         "Error on open garage",
         `The parking ${parkingId} is disabled`
       );
+    }
+
+    if (
+      this._parkingDataService.fullParkingsData.find(
+        ({ garage }) => garage?.patente === carPatent
+      )
+    ) {
+      return this._modalService.errorModal(
+        "Error on open garage",
+        `The car with patent ${carPatent} is already in a garage`
+      );
+    }
 
     const cfg = {
       method: "POST",
