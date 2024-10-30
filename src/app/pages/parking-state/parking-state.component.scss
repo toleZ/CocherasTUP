@@ -178,7 +178,7 @@ main {
 
       tr {
         display: grid;
-        grid-template-columns: 2fr 0.5fr;
+        grid-template-columns: 2fr 0.5fr 0.5fr;
         justify-items: center;
 
         td {
@@ -195,28 +195,28 @@ main {
             justify-content: center;
             align-items: center;
             gap: 1rem;
+          }
 
-            button {
-              border: none;
-              background: none;
-              font-family: fonts.$font-secondary;
-              font-weight: 600;
-              font-size: 1.2rem;
-              color: rgba(255, 255, 255, 0.5);
-              fill: rgba(255, 255, 255, 0.5);
-              transition: color 0.3s linear, fill 0.3s linear;
+          button {
+            border: none;
+            background: none;
+            font-family: fonts.$font-secondary;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+            fill: rgba(255, 255, 255, 0.5);
+            transition: color 0.3s linear, fill 0.3s linear;
 
-              &:hover {
-                cursor: pointer;
-                color: rgba(255, 255, 255, 0.75);
-                fill: rgba(255, 255, 255, 0.75);
-              }
+            &:hover {
+              cursor: pointer;
+              color: rgba(255, 255, 255, 0.75);
+              fill: rgba(255, 255, 255, 0.75);
+            }
 
-              &:disabled {
-                cursor: not-allowed;
-                color: rgba(255, 255, 255, 0.1);
-                fill: rgba(255, 255, 255, 0.1);
-              }
+            &:disabled {
+              cursor: not-allowed;
+              color: rgba(255, 255, 255, 0.1);
+              fill: rgba(255, 255, 255, 0.1);
             }
 
             > button {

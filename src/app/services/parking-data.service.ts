@@ -130,10 +130,17 @@ export class ParkingDataService {
     }
   };
 
-  handleEmptyAll = () => {
-    this.parkingsData.forEach(async ({ id }) => {
-      this.handleDeleteById(id);
-    });
+  handleEmptyAll = async () => {
+    const res = await this._modalService.confirmModal(
+      "Empty all parkings",
+      "Are you sure you want to empty all parkings?"
+    );
+
+    if (res)
+      this.parkingsData.forEach(async ({ id }) => {
+        this.handleDeleteById(id);
+      });
+    else return;
   };
 
   private _generateRandomDescription(): string {
@@ -145,24 +152,49 @@ export class ParkingDataService {
   }
 
   handleAddParking = async () => {
+    const descripcion = await this._modalService.inputModal(
+      "Add parking",
+      "Enter parking description",
+      "Parking description"
+    );
+
+    if (!descripcion) return;
+    else if (
+      this.fullParkingsData.find(
+        ({ descripcion }) => descripcion === descripcion
+      )
+    ) {
+      this._modalService.errorModal(
+        "Error",
+        `Parking with description ${descripcion} already exists`
+      );
+      return;
+    }
+
     const cfg = {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        Authorization: "Bearer " + this._authService.user?.token,
+        authorization: "Bearer " + this._authService.user?.token,
       },
-      body: JSON.stringify({ descripcion: this._generateRandomDescription() }),
+      body: JSON.stringify({
+        descripcion,
+      }),
     };
 
-    const res = await fetch(this._baseURL, cfg);
+    try {
+      const res = await fetch(this._baseURL, cfg);
 
-    if (res.status === 200) {
-      this.handleGetParkings();
+      if (res.status === 200) {
+        this.handleGetParkings();
 
-      this._modalService.successModal(
-        "Parking added",
-        "Parking was added successfully"
-      );
+        this._modalService.successModal(
+          "Parking added",
+          `Parking with description ${descripcion} was added`
+        );
+      }
+    } catch (error) {
+      this._modalService.errorModal("Error", `An error occurred\n${error}`);
     }
   };
 
