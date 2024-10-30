@@ -161,12 +161,10 @@
           <div>
             @for (i of parkingDataService.paginate.pagesToShow ; track $index) {
             <button
-              [disabled]="
-                $index + 1 === this.parkingDataService.paginate.curPage
-              "
-              (click)="handleSetPage($index + 1)"
+              [disabled]="i === this.parkingDataService.paginate.curPage"
+              (click)="handleSetPage(i)"
             >
-              {{ $index + 1 }}
+              {{ i }}
             </button>
             }
           </div>
