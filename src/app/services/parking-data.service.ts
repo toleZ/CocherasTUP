@@ -131,25 +131,24 @@ export class ParkingDataService {
   };
 
   handleEmptyAll = async () => {
-    const res = await this._modalService.confirmModal(
+    const confirm = await this._modalService.confirmModal(
       "Empty all parkings",
       "Are you sure you want to empty all parkings?"
     );
 
-    if (res)
-      this.parkingsData.forEach(async ({ id }) => {
-        this.handleDeleteById(id);
-      });
-    else return;
+    if (confirm) {
+      const res = await this._modalService.inputModal(
+        "You are about to empty all parkings",
+        "This action is irreversible, please type 'empty' to confirm",
+        "Type 'empty'"
+      );
+      if (res === "empty") {
+        this.parkingsData.forEach(async ({ id }) => {
+          this.handleDeleteById(id);
+        });
+      } else return;
+    } else return;
   };
-
-  private _generateRandomDescription(): string {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const randomLetter = letters[Math.floor(Math.random() * letters.length)];
-    const randomNumber = Math.floor(Math.random() * 9) + 1;
-
-    return `${randomLetter}${randomNumber}`;
-  }
 
   handleAddParking = async () => {
     const descripcion = await this._modalService.inputModal(
