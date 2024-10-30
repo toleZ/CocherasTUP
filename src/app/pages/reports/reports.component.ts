@@ -30,7 +30,7 @@ export class ReportsComponent {
     this.garageService.garages.forEach((g) => {
       const [year, month] = g.horaIngreso.split("-");
 
-      const garage = garages.find((g) => g.month.split("/")[1] === month);
+      const garage = garages.find((g) => g.month === `${year}/${month}`);
 
       if (garage) {
         garage.garages.push(g);
