@@ -3,11 +3,12 @@ import { Router, RouterModule } from "@angular/router";
 import { AuthDataService } from "../../services/auth-data.service";
 import { FormsModule, NgForm } from "@angular/forms";
 import { Login } from "../../interfaces/login";
+import { NgClass } from "@angular/common";
 
 @Component({
   selector: "app-login",
   standalone: true,
-  imports: [RouterModule, FormsModule],
+  imports: [RouterModule, FormsModule, NgClass],
   templateUrl: "./login.component.html",
   styleUrl: "./login.component.scss",
 })

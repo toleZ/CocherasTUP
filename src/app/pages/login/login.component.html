@@ -10,6 +10,7 @@
         placeholder="Type your username"
         ngModel
         required
+        [ngClass]="{ error: errorLogin }"
       />
 
       <label>Password</label>
@@ -20,6 +21,7 @@
           placeholder="Type your password"
           ngModel
           required
+          [ngClass]="{ error: errorLogin }"
         />
         <button (click)="handleShowPassword()" type="button">
           <svg
@@ -35,6 +37,10 @@
           </svg>
         </button>
       </div>
+
+      <span [ngClass]="{ error: errorLogin }">
+        Invalid username or password. Please try again.
+      </span>
 
       <input type="submit" value="Sign In" />
     </form>
