@@ -28,15 +28,15 @@ export class ReportsComponent {
     const garages: Garages[] = [];
 
     this.garageService.garages.forEach((g) => {
-      const month = g.horaIngreso.split("-")[1];
+      const [year, month] = g.horaIngreso.split("-");
 
-      const garage = garages.find((g) => g.month === month);
+      const garage = garages.find((g) => g.month.split("/")[1] === month);
 
       if (garage) {
         garage.garages.push(g);
       } else {
         garages.push({
-          month,
+          month: `${year}/${month}`,
           garages: [g],
         });
       }
