@@ -1,6 +1,7 @@
 import { Component, inject } from "@angular/core";
 import { RateDataService } from "../../services/rate-data.service";
 import { ModalService } from "../../services/modal.service";
+import { min } from "rxjs";
 
 @Component({
   selector: "app-rates",
@@ -15,7 +16,13 @@ export class RatesComponent {
 
   updateRateValue = async (rateId: string) => {
     this._modalService
-      .inputModal("Update Rate", "Enter new rate value", "Rate Value", "number")
+      .inputModal(
+        "Update Rate",
+        "Enter new rate value",
+        "Rate Value",
+        "number",
+        "inputAttributes: { min: '0' }"
+      )
       .then((rateValue) => {
         if (rateValue) {
           this.rateService.updateRateValue(rateId, rateValue);

@@ -1,5 +1,9 @@
 import { Injectable } from "@angular/core";
-import Swal, { SweetAlertInput, SweetAlertOptions } from "sweetalert2";
+import Swal, {
+  SweetAlertArrayOptions,
+  SweetAlertInput,
+  SweetAlertOptions,
+} from "sweetalert2";
 
 @Injectable({
   providedIn: "root",
@@ -44,7 +48,8 @@ export class ModalService {
     title: string,
     text: string,
     inputPlaceholder: string,
-    input: SweetAlertInput = "text"
+    input: SweetAlertInput = "text",
+    ...rest: SweetAlertArrayOptions
   ) {
     const options: SweetAlertOptions = {
       title,
@@ -52,11 +57,13 @@ export class ModalService {
       input,
       inputAttributes: {
         required: "true",
+        min: "0",
       },
       inputPlaceholder,
       showCancelButton: true,
       confirmButtonText: "Confirm",
       cancelButtonText: "Cancel",
+      ...rest,
     };
 
     return await Swal.fire(options).then((res) => res.value);

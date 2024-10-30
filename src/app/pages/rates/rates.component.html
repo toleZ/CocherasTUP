@@ -14,7 +14,7 @@
       <tr>
         <td>{{ r.id }}</td>
         <td>{{ r.descripcion }}</td>
-        <td>{{ r.valor }}</td>
+        <td>${{ r.valor }}</td>
         <td>
           <button (click)="updateRateValue(r.id)">
             <svg
