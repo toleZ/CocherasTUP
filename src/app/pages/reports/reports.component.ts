@@ -62,5 +62,10 @@ export class ReportsComponent {
       if (a[as] < b[as]) return this.sortBy.order;
       return 0;
     });
+
+    this.sortBy = {
+      as,
+      order: this.sortBy.order === 1 ? -1 : 1,
+    };
   };
 }
