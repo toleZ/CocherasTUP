@@ -110,7 +110,20 @@ export class ParkingDataService {
     }
   };
 
-  handleDeleteById = async (toDelete: number) => {
+  handleDeleteById = async (
+    toDelete: number,
+    securityModal: boolean = true
+  ) => {
+    if (securityModal) {
+      const confirm = await this._modalService.inputModal(
+        "Delete parking",
+        `Are you sure you want to delete parking with id ${toDelete}?`,
+        `Type ${toDelete} to confirm`
+      );
+
+      if (!confirm) return;
+    }
+
     const cfg = {
       method: "DELETE",
       headers: {
@@ -144,7 +157,7 @@ export class ParkingDataService {
       );
       if (res === "empty") {
         this.parkingsData.forEach(async ({ id }) => {
-          this.handleDeleteById(id);
+          this.handleDeleteById(id, false);
         });
       } else return;
     } else return;
