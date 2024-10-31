@@ -173,7 +173,7 @@ export class ParkingDataService {
     if (!descripcion) return;
     else if (
       this.fullParkingsData.find(
-        ({ descripcion }) => descripcion === descripcion
+        ({ descripcion }) => descripcion !== descripcion
       )
     ) {
       this._modalService.errorModal(
